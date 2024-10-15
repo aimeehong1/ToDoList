@@ -6,17 +6,20 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct DetailView: View {
-    @State var toDo: String
+    @State var toDo: ToDo
+    @State private var item = ""
     @State private var reminderIsOn = false
     @State private var isCompleted = false
     @State private var notes = ""
     @State private var dueDate = Calendar.current.date(byAdding: .day, value: 1, to: Date.now)!
+    @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) private var dismiss
     var body: some View {
         List {
-            TextField("Enter To Do here", text: $toDo)
+            TextField("Enter To Do here", text: $item)
                 .font(.title)
                 .buttonStyle(.borderedProminent)
                 .padding(.vertical)
@@ -42,6 +45,13 @@ struct DetailView: View {
                 .listRowSeparator(.hidden)
         }
         .listStyle(.plain)
+        .onAppear() {
+            item = toDo.item
+            reminderIsOn = toDo.reminderIsOn
+            dueDate = toDo.dueDate
+            notes = toDo.notes
+            isCompleted = toDo.isCompleted
+        }
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -51,7 +61,18 @@ struct DetailView: View {
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Save") {
-                // TODO: add save code here
+                    // move data from local vars to ToDo object
+                    toDo.item = item
+                    toDo.reminderIsOn = reminderIsOn
+                    toDo.dueDate = dueDate
+                    toDo.notes = notes
+                    toDo.isCompleted = isCompleted
+                    modelContext.insert(toDo)
+                    guard let _ = try? modelContext.save() else {
+                        print("😡 ERROR: Save on DetailView did not work.")
+                        return
+                    }
+                    dismiss()
                 }
             }
         }
@@ -60,6 +81,7 @@ struct DetailView: View {
 
 #Preview {
     NavigationStack {
-        DetailView(toDo: "")
+        DetailView(toDo: ToDo())
+            .modelContainer(for: ToDo.self, inMemory: true)
     }
 }
