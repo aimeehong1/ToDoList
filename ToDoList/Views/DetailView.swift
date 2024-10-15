@@ -12,9 +12,10 @@ struct DetailView: View {
     @State var toDo: ToDo
     @State private var item = ""
     @State private var reminderIsOn = false
-    @State private var isCompleted = false
-    @State private var notes = ""
     @State private var dueDate = Calendar.current.date(byAdding: .day, value: 1, to: Date.now)!
+    @State private var notes = ""
+    @State private var isCompleted = false
+    
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) private var dismiss
     var body: some View {
