@@ -16,13 +16,15 @@ class ToDo {
     var dueDate = Date.now + 60*60*24
     var notes = ""
     var isCompleted = false
+    var timeStamp = Date.now
     
-    init(item: String = "", reminderIsOn: Bool = false, dueDate: Date = Date.now + 60*60*24, notes: String = "", isCompleted: Bool = false) {
+    init(item: String = "", reminderIsOn: Bool = false, dueDate: Date = Date.now + 60*60*24, notes: String = "", isCompleted: Bool = false, timeStamp: Date = Date.now) {
         self.item = item
         self.reminderIsOn = reminderIsOn
         self.dueDate = dueDate
         self.notes = notes
         self.isCompleted = isCompleted
+        self.timeStamp = timeStamp
     }
 }
 
