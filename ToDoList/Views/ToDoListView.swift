@@ -39,7 +39,7 @@ struct SortedToDoList: View {
             ForEach(toDos) { toDo in
                 VStack(alignment: .leading) {
                     HStack {
-                        Image(systemName: toDo.isCompleted ? "checkmark.rectangle" : "rectangle")
+                        Image(systemName: toDo.isCompleted ? "checkmark.circle" : "circle")
                             .onTapGesture {
                                 toDo.isCompleted.toggle()
                                 guard let _ = try? modelContext.save() else {
@@ -63,7 +63,7 @@ struct SortedToDoList: View {
                             }
                         }
                     }
-                    .font(.title2)
+                    .font(.title3)
                     
                     HStack {
                         Text(toDo.dueDate.formatted(date: .abbreviated, time: .shortened))
